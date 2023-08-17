@@ -6,6 +6,7 @@ use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RolController;
 use App\Models\Empleado;
 
 /*
@@ -32,6 +33,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::post('/empleados', [EmpleadoController::class, 'store']);
     Route::get('/buscar-empleados', [EmpleadoController::class, 'buscarEmpleados']);
     Route::get('/obtener-puestos', [PuestoController::class, 'obtenerPuestos']);
+    Route::get('/obtener-roles', [RolController::class, 'index']);
     Route::get('auth/logout', [AuthController::class,'logout']);
     Route::put('/empleados/{id}', [EmpleadoController::class, 'update']);
     Route::put('/empleados/{id}/soft-delete', [EmpleadoController::class, 'softDelete']);
