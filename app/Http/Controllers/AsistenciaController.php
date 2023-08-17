@@ -6,12 +6,23 @@ use App\Models\Asistencia;
 use App\Models\Hora;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Carbon;
 
 class AsistenciaController extends Controller
 {
     public function registrarAsistencia(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'empleado_id' => 'required|exists:empleados,id',
+            'hora_entrada' => 'required|date_format:H:i',
+            'hora_salida' => 'required|date_format:H:i',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+    
         $empleadoId = $request->input('empleado_id');
         $horaEntrada = $request->input('hora_entrada');
         $horaSalida = $request->input('hora_salida');
@@ -49,7 +60,6 @@ class AsistenciaController extends Controller
     
         return response()->json($response, 201);
     }
-
 
 
 
