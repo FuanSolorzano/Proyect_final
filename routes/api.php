@@ -6,6 +6,7 @@ use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\PuestoController;
 use App\Http\Controllers\AuthController;
+use App\Models\Empleado;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('auth/login', [AuthController::class,'login']);
 
 Route::middleware(['auth:sanctum'])->group(function(){
+    Route::get('/user/info', [EmpleadoController::class, 'getUserInfo']);
     Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia']);
     Route::get('/empleados', [EmpleadoController::class, 'index']);
     Route::post('/empleados', [EmpleadoController::class, 'store']);

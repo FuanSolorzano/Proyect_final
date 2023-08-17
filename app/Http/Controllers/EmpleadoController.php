@@ -187,7 +187,15 @@ class EmpleadoController extends Controller
     }
 
     
-
+    public function getUserInfo(Request $request)
+    {
+        $user = $request->user(); // Obtiene el usuario autenticado
+        
+        // Si deseas excluir el campo de contraseña de la respuesta
+        $user->makeHidden(['password']);
+        
+        return response()->json(['user' => $user], 200);
+    }
     /**
      * Display the specified resource.
      */
