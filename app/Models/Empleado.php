@@ -12,7 +12,7 @@ class Empleado extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['fecha_contratacion', 'puesto_id', 'user_id'];
+    protected $fillable = ['fecha_contratacion','estado', 'puesto_id', 'user_id'];
 
     public function puesto()
     {

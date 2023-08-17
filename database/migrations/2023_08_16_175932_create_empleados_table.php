@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
             $table->date('fecha_contratacion');
+            $table->boolean('estado')->default(true);
             $table->unsignedBigInteger('puesto_id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('puesto_id')->references('id')->on('puestos');

@@ -31,5 +31,6 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/buscar-empleados', [EmpleadoController::class, 'buscarEmpleados']);
     Route::get('/obtener-puestos', [PuestoController::class, 'obtenerPuestos']);
     Route::get('auth/logout', [AuthController::class,'logout']);
-
+    Route::put('/empleados/{id}', [EmpleadoController::class, 'update']);
+    Route::put('/empleados/{id}/soft-delete', [EmpleadoController::class, 'softDelete']);
 });

@@ -16,7 +16,9 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        
+        $empleados = Empleado::with('user', 'puesto')->get();
+
+    return response()->json(['empleados' => $empleados], 200);
     }
 
     /**
@@ -86,6 +88,62 @@ class EmpleadoController extends Controller
         return response()->json(['message' => 'Empleado registrado correctamente'], 201);
     }
 
+    public function update(Request $request, $id)
+    {
+        $empleado = Empleado::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255',
+            'fecha_nacimiento' => 'required|date',
+            'email' => 'required|email|unique:users,email,' . $empleado->user->id,
+            'puesto_id' => 'required|exists:puestos,id',
+            'fecha_contratacion' => 'required|date',
+            'estado' => 'required',
+        ], [
+            'nombre.required' => 'El campo nombre es obligatorio.',
+            'apellido.required' => 'El campo apellido es obligatorio.',
+            'direccion.required' => 'El campo dirección es obligatorio.',
+            'fecha_nacimiento.required' => 'El campo fecha de nacimiento es obligatorio.',
+            'fecha_nacimiento.date' => 'El campo fecha de nacimiento debe ser una fecha válida.',
+            'email.required' => 'El campo correo electrónico es obligatorio.',
+            'email.email' => 'El campo correo electrónico debe ser una dirección de correo válida.',
+            'email.unique' => 'El correo electrónico ya está en uso.',
+            'puesto_id.required' => 'El campo ID de puesto es obligatorio.',
+            'puesto_id.exists' => 'El ID de puesto proporcionado no es válido.',
+            'fecha_contratacion.required' => 'El campo fecha de contratación es obligatorio.',
+            'fecha_contratacion.date' => 'El campo fecha de contratación debe ser una fecha válida.',
+            'estado.required' => 'El campo de estado es necesario'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $empleado->update([
+            'fecha_contratacion' => $request->fecha_contratacion,
+            'puesto_id' => $request->puesto_id,
+            'estado' => $request->estado,
+        ]);
+
+        $empleado->user->update([
+            'nombre' => $request->nombre,
+            'apellido' => $request->apellido,
+            'direccion' => $request->direccion,
+            'fecha_nacimiento' => $request->fecha_nacimiento,
+            'email' => $request->email,
+            'estado' => $request->estado,
+        ]);
+
+        return response()->json(['message' => 'Empleado actualizado correctamente'], 200);
+    }
+
+
+
+
+
+
     public function buscarEmpleados(Request $request)
     {
         $jsonData = $request->json()->all();
@@ -116,6 +174,18 @@ class EmpleadoController extends Controller
     }
 
 
+        public function softDelete($id)
+    {
+        $empleado = Empleado::find($id);
+        if (!$empleado) {
+            return response()->json(['message' => 'Empleado no encontrado'], 404);
+        }
+
+        $empleado->update(['estado' => false]);
+
+        return response()->json(['message' => 'Empleado eliminado lógicamente'], 200);
+    }
+
     
 
     /**
@@ -137,7 +207,7 @@ class EmpleadoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Empleado $empleado)
+    public function updat(Request $request, Empleado $empleado)
     {
         //
     }
