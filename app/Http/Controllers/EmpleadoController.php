@@ -6,10 +6,9 @@ use App\Models\Empleado;
 use App\Models\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class EmpleadoController extends Controller
@@ -19,7 +18,7 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        $empleados = Empleado::with('user', 'puesto')->get();
+        $empleados = Empleado::with('user', 'puesto','asistenciaRegistros.horasTrabajadas')->get();
 
     return response()->json(['empleados' => $empleados], 200);
     }
@@ -35,9 +34,9 @@ class EmpleadoController extends Controller
     
     public function getEmpleadoRole()
     {
-        $empleadoRole = Rol::where('nombre_del_rol', 'Empleado')->first();
+        $empleados=User::where('rol_id','=','3')->with('empleados')->get();
 
-        return response()->json(['rol' => $empleadoRole], 200);
+        return response()->json(['empleados' => $empleados ], 200);
     }
 
 
@@ -207,14 +206,35 @@ class EmpleadoController extends Controller
     }
 
     
-    public function getUserInfo(Request $request)
+    public function getUserInfo()
     {
-        $id=Auth::guard('sanctum')->user()->id;
+       /*  $id=Auth::guard('sanctum')->user()->id;
         $usuario=User::find($id)->with('rol','empleados.puesto')->first();
+        return response()->json([
+            "user" => $usuario,
+        ],200); */
+        $user = Auth::user();
+         $usuario=User::where('id',$user->id)->with('rol','empleados','empleados.puesto','empleados.asistenciaRegistros.horasTrabajadas')->first(); 
+        /* $usuario=User::find($id)->with('rol','empleados.puesto')->first(); */
         return response()->json([
             "user" => $usuario,
         ],200);
     }
+    public function getUserInformationTotal()
+    {
+       /*  $id=Auth::guard('sanctum')->user()->id;
+        $usuario=User::find($id)->with('rol','empleados.puesto')->first();
+        return response()->json([
+            "user" => $usuario,
+        ],200); */
+        $user = Auth::user();
+         $usuario=User::where('id',$user->id)->with('rol','empleados','empleados.puesto','empleados.asistenciaRegistros.horasTrabajadas')->first(); 
+        /* $usuario=User::find($id)->with('rol','empleados.puesto')->first(); */
+        return response()->json([
+            "user" => $usuario,
+        ],200);
+    }
+
     /**
      * Display the specified resource.
      */

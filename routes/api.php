@@ -28,6 +28,7 @@ Route::post('auth/login', [AuthController::class,'login']);
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/user-info', [EmpleadoController::class, 'getUserInfo']);
+    Route::get('/user-information-total', [EmpleadoController::class, 'getUserInformationTotal']);
     Route::post('/registrar-asistencia', [AsistenciaController::class, 'registrarAsistencia']);
     Route::get('/empleados', [EmpleadoController::class, 'index']);
     Route::post('/empleados', [EmpleadoController::class, 'store']);

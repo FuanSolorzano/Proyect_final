@@ -15,8 +15,8 @@ class AsistenciaController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'empleado_id' => 'required|exists:empleados,id',
-            'hora_entrada' => 'required|date_format:H:i',
-            'hora_salida' => 'required|date_format:H:i',
+            'hora_entrada' => 'required',
+            'hora_salida' => 'required',
         ]);
     
         if ($validator->fails()) {

@@ -23,7 +23,7 @@ class User extends Authenticatable
 
     public function empleados()
     {
-        return $this->hasMany(Empleado::class);
+        return $this->hasOne(Empleado::class);
     }
 
     public function burocratas()
