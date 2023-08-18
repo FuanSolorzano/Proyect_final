@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empleado;
+use App\Models\Rol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +23,23 @@ class EmpleadoController extends Controller
 
     return response()->json(['empleados' => $empleados], 200);
     }
+
+    public function getAllRoles()
+    {
+        $roles = Rol::all();
+    
+        return response()->json(['roles' => $roles], 200);
+    }
+
+
+    
+    public function getEmpleadoRole()
+    {
+        $empleadoRole = Rol::where('nombre_del_rol', 'Empleado')->first();
+
+        return response()->json(['rol' => $empleadoRole], 200);
+    }
+
 
     /**
      * Show the form for creating a new resource.
